@@ -14,6 +14,17 @@ begin
   sorry
 end
 
+-- our lemma :D
+lemma collinear_iff_on_line_through (X Y Z : Ω ) (h: X ≠ Y) : (collinear({X, Y, Z} : set Ω )) ↔  Z ∈ line_through X Y :=
+begin
+sorry,
+end
+
+-- our other lemma
+lemma not_same_line_different_points (X Y :  Ω) (h : X ≠ Y) : (line_through({X, Y}))
+begin
+sorry,
+end
 -- added
 lemma line_through_from_and (P Q : Ω) (ℓ : Line Ω) (h1 : P ≠ Q)
 (h2 : P ∈ ℓ ∧ Q ∈ ℓ) : ℓ = line_through P Q :=
@@ -31,6 +42,20 @@ begin
   exact hP,
 end
 
+lemma exists_point_not_in_line (ℓ : Line Ω) : ∃ (P : Ω), P ∉ ℓ :=
+begin
+rcases (existence Ω) with ⟨A : Ω, B, C, ⟨h1, h2, h3, h4⟩⟩,
+by_cases h: line_through A B = ℓ,
+{ use C,
+  rw ← h,
+  exact h4 },
+{ by_cases a: A ∈ ℓ, { use B,
+    intro p,
+    apply h,
+    rw incidence h1 a p },
+  { use A }, },
+end
+
 lemma auxiliary_point (ℓ : Line Ω) (h : collinear ({A, B, C} : set Ω)) (hA : A ∉ ℓ) (hB : B ∉ ℓ)
   (hC : C ∉ ℓ) (hAB : A ≠ B) (hAC : A ≠ C) (hBC : B ≠ C)  :
   ∃ (D E : Ω), D ∈ ℓ ∧ ¬ E ∈ ℓ ∧ same_side ℓ A E ∧ (D * A * E) ∧
@@ -38,65 +63,46 @@ lemma auxiliary_point (ℓ : Line Ω) (h : collinear ({A, B, C} : set Ω)) (hA :
   ¬ collinear ({E, C, B} : set Ω) ∧
   ¬ collinear ({A, C, E} : set Ω)  :=
 begin
---  cases h,
---  specialize h_h,
-  rcases (exists_point_on_line ℓ) with ⟨D, hD⟩,
-  have f:= point_in_line_not_point hD hA,
-  rcases (point_on_ray f) with ⟨E, hE⟩,
-  use D, use E,
-  repeat {split},
-  assumption,
-  {
-    intro hc,
-    apply hA,
-    -- prove that a is in the line through D and E 
-  -- use have that line through D E is l, then you can prove with use
-  -- bc it's an equality
-    have g1 : ℓ = line_through D A,
+    -- define what a b c line is, m
+    set m := line_through A B with hm,
+    
+    have hAM: A ∈ m,
+    exact line_through_left A B,
+
+    have hBM: B ∈ m,
+    exact line_through_right A B,
+
+    have hCM:= (collinear_iff_on_line_through A B C hAB).1 h,
+    
+    --rcases (line_contains_two_points ℓ) with ⟨D1, D2, hD1,l⟩, 
+--    cases h with h h2,
+
+    --l is not m
+    
+    by_cases fdg: D1 ∈ m,
     {
-      apply line_through_from_and D A ℓ f,
-      split,
-      exact hD,
-      exact between_points_share_line hD hc hE,
-      
+      use D1,
     },
-    have z:= line_through D E = ℓ,
-    exact between_points_share_line hD hc hE,
-  },
-  {
-   clarify,
-   sorry
-  },
-  {
-    exact hE,
-  },
-  {
-    intro dc,
-    unfold collinear at dc,
-    simp at dc,
-    cases dc with d1 d2,
-    cases d2 with d2 d3,
-    cases d3 with d3 d4,
-    sorry
---    exact between_points_share_line hD hC hE,
-  },
-  {
-   intro fa,
-   unfold collinear at fa,
-   simp at fa,
-   cases fa with f1 f2,
-   cases f2 with f2 f3,
-   cases f3 with f3 f4,
-   library_search,
-  },
-  {
-   intro ea,
-   unfold collinear at ea,
-   simp at ea,
-   cases ea with e1 e2,
-   cases e2 with e2 e3,
-   cases e3 with e3 e4,
-  },
+    {
+      sorry
+    },
+    
+    --there is point in l, not in m, D
+
+    --D*A*E w point on ray
+
+    -- D A E are collinear collinear of between, meaning there is a line s. Have to get a line
+
+    -- l is different s
+
+    -- E is not in l.
+
+    -- A E same side of l
+
+    -- E is not in m.
+    -- 
+    
+
 
 --  rcases (exists_point_on_line ℓ) with ⟨F, hF⟩,
   --have g:= point_in_line_not_point hE hD,
